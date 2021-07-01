@@ -1,0 +1,42 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "launch",
+            "type": "lua",
+            "request": "launch",
+            "stopOnEntry": true,
+            "program": "${workspaceFolder}/1.lua",
+            "cwd": "${workspaceFolder}",
+            "path": "${workspaceFolder}/?.lua",
+            "cpath": "${workspaceFolder}/?.dll",
+            "arg": [],
+            "consoleCoding": "utf8"
+        },
+        {
+            "name": "launch process",
+            "type": "lua",
+            "request": "launch",
+            "stopOnEntry": true,
+            "runtimeExecutable": "${workspaceFolder}/lua.exe",
+            "runtimeArgs": "${workspaceFolder}/main.lua",
+            "consoleCoding": "utf8"
+        },
+        {
+            "name": "attach",
+            "type": "lua",
+            "request": "attach",
+            "stopOnEntry": true,
+            "address": "127.0.0.1:4278"
+        },
+        
+        // {
+        //     "type": "lua",
+        //     "request": "launch",
+        //     "name": "Launch",
+        //     "program": "${workspaceFolder}"
+        // }
+    ]
+}
