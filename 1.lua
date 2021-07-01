@@ -1,13 +1,8 @@
-function max(num1, num2)
-    if (num1 > num2) then
-        result = num1
-    else
-        result = num2
-    end
+-- goto语句
+local a = 1
+::label::  print("--- goto label ---")
 
-    return result
+a = a+1
+if a < 3 then
+    goto label   -- a 小于 3 的时候跳转到标签 label
 end
-
--- calling a function
-print("The maximum of the two numbers is ", max(10, 4))
-print("The maximum of the two numbers is ", max(5, 6))

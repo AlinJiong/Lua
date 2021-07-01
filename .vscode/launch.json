@@ -31,7 +31,6 @@
             "stopOnEntry": true,
             "address": "127.0.0.1:4278"
         },
-        
         // {
         //     "type": "lua",
         //     "request": "launch",
