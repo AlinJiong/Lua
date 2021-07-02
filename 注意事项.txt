@@ -1,0 +1,32 @@
+1、索引从1开始，而不是0。
+
+2、函数可变参数使用 ... 
+function average(...)
+    result = 0
+    local arg = {...} --> arg 为一个表，局部变量,将传入的表保存
+    for i, v in ipairs(arg) do
+        result = result + v
+    end
+    print("总共传入 " .. #arg .. " 个数")
+    return result / #arg
+end
+
+print("平均值为", average(10, 5, 3, 4, 5, 6))
+
+
+3、查看变量长度使用#
+
+4、一般使用{}传入表
+
+5、nil和false为0， 数字0不为0
+
+6、遍历列表使用select
+select('#', …) 返回可变参数的长度。
+select(n, …) 用于返回从起点 n 开始到结束位置的所有参数列表。
+
+7、不等于用~=
+nil=~=true
+
+and or not
+
+8、

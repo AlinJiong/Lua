@@ -47,3 +47,23 @@ function average(...)
 end
 
 print("平均值为", average(10, 5, 3, 4, 5, 6))
+
+-- 固定参数写在可变参数前面
+function fwrite(fmt, ...)
+    return io.write(string.format(fmt, ...))
+end
+
+fwrite("ok\n")
+
+--select
+-- select('#', …) 返回可变参数的长度。
+-- select(n, …) 用于返回从起点 n 开始到结束位置的所有参数列表。
+
+function f(...)
+    a = select("#", ...)
+    print("len:" .. a)
+    print(select(2, ...))
+end
+
+
+f(1,2,3,4,5)
