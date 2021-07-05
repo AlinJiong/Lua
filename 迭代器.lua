@@ -1,5 +1,6 @@
 -- 无状态和多状态两种方式
 
+-- 无状态
 function square(max, start)
     if start < max then
         start = start + 1
@@ -7,6 +8,7 @@ function square(max, start)
     end
 end
 
+-- 注意函数的调用方式
 for i, n in square, 3, 0 do
     print(i, n)
 end

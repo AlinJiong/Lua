@@ -8,7 +8,7 @@
             "type": "lua",
             "request": "launch",
             "stopOnEntry": true,
-            "program": "${workspaceFolder}/1.lua",
+            "program": "${workspaceFolder}/test.lua",
             "cwd": "${workspaceFolder}",
             "path": "${workspaceFolder}/?.lua",
             "cpath": "${workspaceFolder}/?.dll",

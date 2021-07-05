@@ -29,4 +29,15 @@ nil=~=true
 
 and or not
 
-8、
+8、迭代器无状态调用
+function square(max, start)
+    if start < max then
+        start = start + 1
+        return start, start * start
+    end
+end
+
+-- 注意函数的调用方式
+for i, n in square, 3, 0 do
+    print(i, n)
+end
