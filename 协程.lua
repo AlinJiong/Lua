@@ -12,7 +12,7 @@ co =
 coroutine.resume(co)
 coroutine.resume(co)
 coroutine.resume(co)
-
+       
 print("...wrap...")
 function wrap(param)
     print("Before", param)

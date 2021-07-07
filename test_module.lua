@@ -8,3 +8,4 @@ module.func3()
 -- 加载方式第二种
 local m = require("module")
 print(m.constant)
+m.new()

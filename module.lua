@@ -13,4 +13,7 @@ function module.func3()
     func2()
 end
 
+function module:new()
+    print('new')
+end
 return module

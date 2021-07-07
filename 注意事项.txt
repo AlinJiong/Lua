@@ -25,7 +25,7 @@ select('#', …) 返回可变参数的长度。
 select(n, …) 用于返回从起点 n 开始到结束位置的所有参数列表。
 
 7、不等于用~=
-nil=~=true
+nil~=true
 
 and or not
 
@@ -41,3 +41,26 @@ end
 for i, n in square, 3, 0 do
     print(i, n)
 end
+
+9、string.byte(i,j)
+返回对应下标的ASCII码
+
+10、符号优先级，赋值从右到左，and和or优先级最低
+-- host = (p == "ws" and 80 or 443)
+-- 若p=="ws",则为true, true and 80 为80，否则false and 80 为false
+-- false or 443 为443, 80 or 443 为80
+
+p = "tls"
+host = p == "ws" and 80 or 443
+print(host)
+
+tp = "ws"
+host = tp == "ws" and 80 or 443
+print(host)
+
+print(tp == "ws")
+print(tp == "ws" and 80)
+print(true and 80)
+print(false and 80)
+print(false or 80)
+print(80 or 443)
