@@ -64,3 +64,14 @@ print(true and 80)
 print(false and 80)
 print(false or 80)
 print(80 or 443)
+
+11.加载动态链接库.so 
+先用c文件编写对应函数的代码，然后编译生成.so文件生成动态链接库，
+其中_cb,_release等函数必不可少。
+struct skynet_context { 
+	void * instance;             //*隔离的环境
+	struct skynet_module * mod;
+	void * cb_ud;                //回调携带的环境 
+	skynet_cb cb;                //*回调函数
+	struct message_queue *queue; //*消息队列
+}

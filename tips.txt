@@ -10,3 +10,18 @@ typedef unsigned char      uint8_t;
 typedef unsigned short     uint16_t;
 typedef unsigned int       uint32_t;
 typedef unsigned long long uint64_t;
+
+3.C语言中，防止头文件a.h被重复引用，通常使用以下方式来解决，
+A_H可以换成其他的字符串
+#ifndef A_H
+#define A_H
+#endif
+
+4. 预编译判断指令,若满足条件1，则编译代码1, #if开头，#endif结尾
+#if　条件　1
+　代码　1
+#elif 条件　2
+　代码　2
+#else
+　代码段 n+1
+#endif

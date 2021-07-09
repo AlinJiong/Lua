@@ -12,8 +12,8 @@ function command.SET(key, value)
     return last
 end
 
-command.SET(1,2)
+command.SET(1, 2)
 print(command.GET(1))
-print(command.SET(1,3))
+print(command.SET(1, 3))
 
 print(command.GET(1))
