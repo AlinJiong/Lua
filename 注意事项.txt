@@ -29,6 +29,23 @@ nil~=true
 
 and or not
 
+符号优先级，从高到低
+^
+not    - (unary)
+*      /       %
++      -
+..
+<      >      <=     >=     ~=     ==
+and
+or
+
+除了^ 和 .. 的所有运算符都是左连接
+a+i < b/2+1          <-->       (a+i) < ((b/2)+1)
+5+x^2*8              <-->       5+((x^2)*8)
+a < y and y <= z     <-->       (a < y) and (y <= z)
+-x^2                 <-->       -(x^2)
+x^y^z                <-->       x^(y^z)
+
 8、迭代器无状态调用
 function square(max, start)
     if start < max then
@@ -65,7 +82,7 @@ print(false and 80)
 print(false or 80)
 print(80 or 443)
 
-11.加载动态链接库.so 
+11、加载动态链接库.so 
 先用c文件编写对应函数的代码，然后编译生成.so文件生成动态链接库，
 其中_cb,_release等函数必不可少。
 struct skynet_context { 
@@ -75,3 +92,5 @@ struct skynet_context {
 	skynet_cb cb;                //*回调函数
 	struct message_queue *queue; //*消息队列
 }
+
+12、框架中的 api 参数中，name 常为函数名，...为name函数待传入的参数
