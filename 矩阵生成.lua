@@ -15,20 +15,21 @@
 
 local arr = {}
 local arrCopy = {}
-local num = 5 --定义元素个数
-
-function myprint(tab) --自定义打印函数
+--自定义打印函数
+function myprint(tab)
     print(table.concat(tab, ","))
 end
 
-function printTable(tab) --打印整个table
+--打印整个table
+function printTable(tab)
     print("...")
     for i = 1, #tab do
         myprint(tab[i])
     end
 end
 
-function deepcopy(orig) --自定义深拷贝函数，只能拷贝一维
+--自定义深拷贝函数，只能拷贝一维
+function deepcopy(orig)
     local orig_type = type(orig)
     local copy
     if orig_type == "table" then
@@ -43,7 +44,8 @@ function deepcopy(orig) --自定义深拷贝函数，只能拷贝一维
     return copy
 end
 
-function copyTable(tab) --自定义二维拷贝函数
+--自定义二维拷贝
+function copyTable(tab)
     local copy = {}
     for i = 1, #tab do
         copy[i] = deepcopy(tab[i])
@@ -51,45 +53,18 @@ function copyTable(tab) --自定义二维拷贝函数
     return copy
 end
 
-function remove(tab) --自定义消除0的函数
-    for i = #tab, 2, -1 do --第一行可以为0
-        for j = 1, #tab do
-            if tab[i][j] == 0 then
-                for k = i - 1, 1, -1 do
-                    if tab[k][j] ~= 0 then
-                        tab[i][j], tab[k][j] = tab[k][j], tab[i][j]
-                        break
-                    end
-                end
-            end
-        end
-    end
-end
-
-function restore(tab) --自定义还原函数，返回生成数序列
-    str = ""
+--自定义消除函数
+function remove(tab)
     for i = #tab, 1, -1 do
-        local flag = 0
         for j = 1, #tab do
-            if tab[i][j] == 0 then
-                flag = 1
-            end
-        end
-        if flag == 1 then
-            for k = 1, #tab do
-                if tab[i][k] ~= 0 then
-                    str = str .. "0"
-                else
-                    tab[i][k] = math.random(num)
-                    str = str .. tab[i][k]
-                end
+            if i ~= 1 and tab[i][j] == 0 then
+                tab[i][j] = tab[i - 1][j]
             end
         end
     end
-    return str
 end
 
-function judgeRow(tab) --判断行，若有元素可以消去，返回消除个数和下标
+function judgeRow(tab) --判断行
     local max_len, count, flag = 1, 1, 1 --flag记录行下标
     for i = 1, #tab - 1 do
         if tab[i] == tab[i + 1] then
@@ -110,7 +85,7 @@ function judgeRow(tab) --判断行，若有元素可以消去，返回消除个�
     end
 end
 
-function judgeCol(arr, xlabel) --判断列,xlabel表示第几列。若有元素可以消去，返回消除个数和下标
+function judgeCol(arr, xlabel) --判断列,xlabel表示第几列
     local max_len, count, flag = 1, 1, 1 --flag记录列下标
 
     for i = 1, #arr - 1 do
@@ -132,48 +107,34 @@ function judgeCol(arr, xlabel) --判断列,xlabel表示第几列。若有元素�
     end
 end
 
-function init() --初始化序列
-    for i = 1, 8 do
-        arr[i] = {}
-        for j = 1, 8 do
-            arr[i][j] = math.random(num)
-        end
+for i = 1, 8 do --初始化生成序列
+    arr[i] = {}
+    for j = 1, 8 do
+        arr[i][j] = math.random(5) --此处的9根据实际情况改变
     end
 end
 
-function erase(tab) --消除重复行列
-    local sum = 0 --记录消除的次数
-    for i = 1, #tab do
-        local len, label = judgeRow(arrCopy[i])
-        if label ~= 0 then
-            sum = sum + 1
-            for j = label - len + 1, label do
-                arr[i][j] = 0
-            end
-        end
-
-        len, label = judgeCol(arrCopy, i)
-        if label ~= 0 then
-            sum = sum + 1
-            for j = label - len + 1, label do
-                arr[j][i] = 0
-            end
-        end
-    end
-    return sum
-end
-
-init()
 printTable(arr)
 
 arrCopy = copyTable(arr)
 
-erase(arr)
+for i = 1, 8 do
+    local len, label = judgeRow(arrCopy[i])
+    if label ~= 0 then
+        for j = label - len + 1, label do
+            arr[i][j] = 0
+        end
+    end
+
+    local len, label = judgeCol(arrCopy, i)
+    if label ~= 0 then
+        for j = label - len + 1, label do
+            arr[j][i] = 0
+        end
+    end
+end
+
 printTable(arr)
 printTable(arrCopy)
 
-remove(arr)
-printTable(arr)
 
-print(restore(arr))
-printTable(arr)
