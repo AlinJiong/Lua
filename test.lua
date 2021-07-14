@@ -1,3 +1,2 @@
-A = 2
-B = 2
-assert(A == B, "failed")
+print "enter a number:"
+print(assert(io.read("*number")))

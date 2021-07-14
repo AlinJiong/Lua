@@ -94,3 +94,14 @@ struct skynet_context {
 }
 
 12、框架中的 api 参数中，name 常为函数名，...为name函数待传入的参数
+
+13、function的常用方法
+（1）function skynet.start(...)
+
+     end
+
+（2）skynet.start = function(...)
+	
+     end
+
+（3）skynet["start"] = function(...)

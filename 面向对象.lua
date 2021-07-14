@@ -1,3 +1,5 @@
+-- 默认为共有继承，.访问成员对象，:调用成员函数。
+
 Account = {balance = 10}
 function Account:withdraw(v)
     self.balance = self.balance - v
@@ -25,5 +27,7 @@ print(a.balance)
 a.deposit(100)
 
 -- 调用基类的方法使用:
+-- 访问成员对象用.
+
 a:withdraw(200)
 print(a.balance)
