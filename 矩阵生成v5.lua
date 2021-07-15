@@ -1,8 +1,3 @@
--- 1、判断元素个数、找出位置序列
--- 2、根据位置序列，找出左下角位置。
--- 3、判断当前可以消除的元素，直到不能消除为止
--- 4、特殊元素消除效果产生，重复1、2、3 直至不能消除为止
-
 local arr = {}
 local num = 5 --定义元素个数
 local res = "" --目标序列
@@ -88,9 +83,7 @@ end
 
 function setZero(series) --置0函数
     for i = 1, #series do
-        if type(arr[series[i][1]][series[i][2]]) == "number" then
-            arr[series[i][1]][series[i][2]] = 0
-        end
+        arr[series[i][1]][series[i][2]] = 0
     end
 end
 
@@ -102,8 +95,6 @@ function erase(tab) --根据情况来消除元素。若没有元素消去，则�
             if #DF(arrCopy, i, j) >= 3 then
                 count = count + 1
                 local series = DF(tab, i, j)
-                local left, down = pos(series)
-                eraseRules(arr, #series, left, down)
                 setZero(series)
             end
         end
@@ -180,15 +171,25 @@ function pos(series) --返回左下角元素位置
     return left, down
 end
 
-function eraseRules(tab, n, left, down) --消除规则,n表示元素个数
-    if n == 4 then
-        tab[left][down] = "A"
-    elseif n == 5 then
-        tab[left][down] = "B"
-    elseif n >= 6 then
-        tab[left][down] = "C"
-    end
-end
+-- function eraseRules(tab, n, left, down) --消除规则,n表示元素个数
+--     if n == 4 then
+--         for i = 1, #tab do
+--             tab[left][i] = 0
+--         end
+--         tab[left][down] = 'A'
+--     elseif n == 5 then
+--         tab[]
+--     elseif n>=6 then
+--         local number = tab[left][down]
+--         for i=1,#tab do
+--             for j=1,#tab do
+--                 if tab[i][j] == number then
+--                     tab[i][j]=0
+--                 end
+--             end
+--         end
+--     end
+-- end
 
 init()
 res = res .. numList(arr)

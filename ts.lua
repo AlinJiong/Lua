@@ -1,10 +1,12 @@
-local series = {}
-table.insert(series, {1, 1})
-table.insert(series, {1, 2})
-table.insert(series, {1, 3})
-
-print(series[2][2])
-for i = 1, #series do
-    print(series[i][1],series[i][2])
+function ts(tab)
+    return tab[1], tab[2]
 end
 
+tab = {1, 2, 3}
+v1, v2 = ts(tab)
+while v1 ~= 0 do
+    print(tab[1])
+    if (tab[1] == 1) then
+        break
+    end
+end

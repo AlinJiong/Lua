@@ -39,6 +39,16 @@ function init() --初始化序列
     end
 end
 
+function numList(tab) --初始数字序列
+    local str = ""
+    for i = 1, #tab do
+        for j = 1, #tab do
+            str = str .. tab[i][j]
+        end
+    end
+    return str
+end
+
 function myprint(tab) --自定义打印函数
     print(table.concat(tab, ","))
 end
@@ -132,16 +142,6 @@ function restore(tab) --自定义还原函数，返回生成数序列
     return str
 end
 
-function numList(tab) --初始数字序列
-    local str = ""
-    for i = 1, #tab do
-        for j = 1, #tab do
-            str = str .. tab[i][j]
-        end
-    end
-    return str
-end
-
 function pos(series) --返回左下角元素位置
     local down = series[1][2]
     local left = series[1][1]
@@ -171,6 +171,36 @@ function eraseRules(tab, n, left, down) --消除规则,n表示元素个数
     elseif n >= 6 then
         tab[left][down] = "C"
     end
+end
+
+function eraseNum(tab) --消除到当前不能消除为止
+    local count = 0
+    local s = {} --保存合成元素坐标和数目
+    local arrCopy = copyTable(tab)
+    for i = 1, #tab do
+        for j = 1, #tab do
+            if #DF(arrCopy, i, j) >= 3 then
+                count = count + 1
+                local series = DF(tab, i, j)
+                if #series > 3 then --大于3的情况才需要保存合成元素位置
+                    local left, down = pos(series)
+                    table.insert(s, {left, down, #series})
+                    eraseRules(arr, #series, left, down)
+                end
+                setZero(series)
+            end
+        end
+    end
+    return count, s
+end
+
+function ed(tab)
+    local str = ""
+    while eraseNum(tab)[1] ~= 0 do
+        remove(tab)
+        str = str .. restore(tab)
+    end
+    return str
 end
 
 init()
