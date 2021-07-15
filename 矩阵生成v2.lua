@@ -17,6 +17,7 @@ local arr = {}
 local arrCopy = {}
 local num = 4 --定义元素个数
 local res = "" --目标序列
+
 function myprint(tab) --自定义打印函数
     print(table.concat(tab, ","))
 end
@@ -132,6 +133,30 @@ function judgeCol(arr, xlabel) --判断列,xlabel表示第几列。若有元素�
     end
 end
 
+function eraseRules(tab, num, axis, pos) --消除规则和效果，其中num表示元素数量，axis=0表示列，为1表示行,pos表示行列数
+    if num == 4 then --消除一行或一列元素
+        if axis == 0 then
+            for i = 1, #tab do
+                tab[pos][i] = 0
+            end
+        else
+            for i = 1, #tab do
+                tab[i][pos] = 0
+            end
+        end
+    elseif num == 5 then
+        if axis == 0 then
+            for i = 1, #tab do
+                tab[pos][i] = 0
+            end
+        else
+            for i = 1, #tab do
+                tab[i][pos] = 0
+            end
+        end
+    end
+end
+
 function init() --初始化序列
     for i = 1, 8 do
         arr[i] = {}
@@ -173,21 +198,6 @@ function numList(tab) --初始数字序列
     return str
 end
 
--- init()
--- printTable(arr)
-
--- arrCopy = copyTable(arr)
-
--- erase(arr)
--- printTable(arr)
--- printTable(arrCopy)
-
--- remove(arr)
--- printTable(arr)
-
--- print(restore(arr))
--- printTable(arr)
-
 init()
 arrCopy = copyTable(arr)
 res = res .. numList(arr)
@@ -196,8 +206,7 @@ printTable(arr)
 while erase(arr) ~= 0 do
     printTable(arr)
     remove(arr)
-    printTable(arr)
-    res = res ..restore(arr)
+    res = res .. restore(arr)
     printTable(arr)
     arrCopy = copyTable(arr)
 end

@@ -173,21 +173,6 @@ function numList(tab) --初始数字序列
     return str
 end
 
--- init()
--- printTable(arr)
-
--- arrCopy = copyTable(arr)
-
--- erase(arr)
--- printTable(arr)
--- printTable(arrCopy)
-
--- remove(arr)
--- printTable(arr)
-
--- print(restore(arr))
--- printTable(arr)
-
 init()
 arrCopy = copyTable(arr)
 res = res .. numList(arr)
@@ -197,7 +182,7 @@ while erase(arr) ~= 0 do
     printTable(arr)
     remove(arr)
     printTable(arr)
-    res = res ..restore(arr)
+    res = res .. restore(arr)
     printTable(arr)
     arrCopy = copyTable(arr)
 end
