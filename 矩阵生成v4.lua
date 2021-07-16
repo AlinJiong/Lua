@@ -1,3 +1,4 @@
+
 local arr = {}
 local arrCopy = {}
 local num = 4 --定义元素个数
