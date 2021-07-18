@@ -22,6 +22,17 @@
 --]]
 local LF = {}
 
+local function myprint(tab) --自定义打印函数
+    print(table.concat(tab, ","))
+end
+
+local function print_table(_config, _status_data) --打印当前grid
+    print("...")
+    for i = 1, #_status_data.grid do
+        myprint(_status_data.grid[i])
+    end
+end
+
 -- 生成一个 8x8 格子数据：初始化元素填充
 local function create_grid(_config, _status_data)
     _status_data.grid = {}
@@ -42,9 +53,11 @@ local function init_creator_data(_config, _status_data)
     _status_data.prog = 0
     _status_data.cur_spec_C = {}
     create_grid(_config, _status_data)
+    print_table(_config, _status_data)
 end
 
 local function drop(_config, _status_data) --下落函数
+    print_table(_config, _status_data) --打印下落之前的grid
     for i = #_status_data.grid, 2, -1 do --第一行可以为0
         for j = 1, #_status_data.grid do --元素下落
             if _status_data.grid[i][j] == 0 then
@@ -59,9 +72,11 @@ local function drop(_config, _status_data) --下落函数
             end
         end
     end
+    print_table(_config, _status_data) --打印下落之后的grid
 end
 
 local function restore(_config, _status_data) --填充函数
+    local before = #_status_data.xc_data_vec --记录序列长度
     for i = #_status_data.grid, 1, -1 do
         local flag = 0
         for j = 1, #_status_data.grid do
@@ -80,6 +95,15 @@ local function restore(_config, _status_data) --填充函数
             end
         end
     end
+
+    print_table(_config, _status_data)
+    print("...vec...")
+    print(table.concat(_status_data.xc_data_vec, ",", before))
+    -- for i = before, #_status_data.xc_data_vec - 8 do
+    --     print(table.concat(_status_data.xc_data_vec, ",", i + 1, i + 8))
+    --     i = i + 8
+    -- end
+    --print_table(_config, _status_data)
 end
 
 -- 下落格子元素。 下落、新元素填充
@@ -90,6 +114,7 @@ end
 
 -- 爆炸特殊元素
 local function blast_spec(_config, _status_data)
+    print_table(_config, _status_data)
     for i = 1, #_status_data.grid do
         for j = 1, #_status_data.grid do
             if _status_data.grid[i][j] == "A" then
@@ -126,6 +151,7 @@ local function blast_spec(_config, _status_data)
             end
         end
     end
+    print_table(_config, _status_data)
 end
 
 -- 递归寻找相同元素的序列
