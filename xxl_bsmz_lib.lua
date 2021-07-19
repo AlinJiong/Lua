@@ -1,4 +1,3 @@
-
 --[[
     消消乐数据生成，函数库
 
@@ -23,6 +22,17 @@
 --]]
 local LF = {}
 
+local function myprint(tab) --自定义打印函数
+    print(table.concat(tab, ","))
+end
+
+local function print_table(_config, _status_data) --打印当前grid
+    print("...")
+    for i = 1, #_status_data.grid do
+        myprint(_status_data.grid[i])
+    end
+end
+
 -- 生成一个 8x8 格子数据：初始化元素填充
 local function create_grid(_config, _status_data)
     _status_data.grid = {}
@@ -43,10 +53,11 @@ local function init_creator_data(_config, _status_data)
     _status_data.prog = 0
     _status_data.cur_spec_C = {}
     create_grid(_config, _status_data)
+    print_table(_config, _status_data)
 end
 
--- 下落格子元素。 下落、新元素填充
-local function drop_grid(_config, _status_data)
+local function drop(_config, _status_data) --下落函数
+    print_table(_config, _status_data) --打印下落之前的grid
     for i = #_status_data.grid, 2, -1 do --第一行可以为0
         for j = 1, #_status_data.grid do --元素下落
             if _status_data.grid[i][j] == 0 then
@@ -61,8 +72,12 @@ local function drop_grid(_config, _status_data)
             end
         end
     end
+    print_table(_config, _status_data) --打印下落之后的grid
+end
 
-    for i = #_status_data.grid, 1, -1 do --填充
+local function restore(_config, _status_data) --填充函数
+    local before = #_status_data.xc_data_vec --记录序列长度
+    for i = #_status_data.grid, 1, -1 do
         local flag = 0
         for j = 1, #_status_data.grid do
             if _status_data.grid[i][j] == 0 then
@@ -80,17 +95,33 @@ local function drop_grid(_config, _status_data)
             end
         end
     end
+
+    print_table(_config, _status_data)
+    print("...vec...")
+    print(table.concat(_status_data.xc_data_vec, ",", before))
+    -- for i = before, #_status_data.xc_data_vec - 8 do
+    --     print(table.concat(_status_data.xc_data_vec, ",", i + 1, i + 8))
+    --     i = i + 8
+    -- end
+    --print_table(_config, _status_data)
+end
+
+-- 下落格子元素。 下落、新元素填充
+local function drop_grid(_config, _status_data)
+    drop(_config, _status_data)
+    restore(_config, _status_data)
 end
 
 -- 爆炸特殊元素
 local function blast_spec(_config, _status_data)
+    print_table(_config, _status_data)
     for i = 1, #_status_data.grid do
         for j = 1, #_status_data.grid do
             if _status_data.grid[i][j] == "A" then
                 _status_data.grid[i][j] = 0
                 for k = 1, #_status_data.grid do
-                    if type(_status_data.grid[i][k]) == "number" then
-                        _status_data.grid[i][k] = 0
+                    if type(_status_data.grid[k][j]) == "number" then
+                        _status_data.grid[k][j] = 0
                     end
                 end
             elseif _status_data.grid[i][j] == "B" then
@@ -120,6 +151,7 @@ local function blast_spec(_config, _status_data)
             end
         end
     end
+    print_table(_config, _status_data)
 end
 
 -- 递归寻找相同元素的序列
@@ -127,7 +159,7 @@ local function DF(tab, x, y, series)
     series = series or {}
     local number = tab[x][y]
 
-    if number == 0 or type(number)=="string" then --提前结束，以及为当前元素为0的情况下，返回空序列
+    if number == 0 or type(number) == "string" then --提前结束，以及为当前元素为0的情况下，返回空序列
         return series
     end
 
@@ -153,26 +185,26 @@ local function DF(tab, x, y, series)
     return series
 end
 
---根据相同元素序列，找到左下角元素位置
+--根据相同元素序列，找到左下角元素位置(x,y)
 local function left_down(series)
-    local down = series[1][2]
-    local left = series[1][1]
+    local down = series[1][1]
+    local left = 100
 
-    for i = 2, #series do
-        if series[i][2] > down then
-            down = series[i][2]
+    for i = 1, #series do
+        if series[i][1] > down then
+            down = series[i][1]
         end
     end
 
     for i = 1, #series do
-        if series[i][2] == down then
-            if series[i][1] < left then
-                left = series[i][1]
+        if series[i][1] == down then
+            if series[i][2] < left then
+                left = series[i][2]
             end
         end
     end
 
-    return left, down
+    return down, left
 end
 
 --自定义深拷贝函数，只能拷贝一维
@@ -208,6 +240,7 @@ end
     返回值：有消除返回 true 
 --]]
 local function xiaochu_grid(_config, _status_data)
+    _status_data.cur_has_spec = false --初始置为false
     local grid_copy = copy_table(_status_data.grid)
     for i = 1, #_status_data.grid do
         for j = 1, #_status_data.grid do
@@ -219,8 +252,8 @@ local function xiaochu_grid(_config, _status_data)
                 _status_data.all_rate = _status_data.all_rate + _config.normal_rate[number][count] --普通元素消除,赔率增加
                 _status_data.prog = _status_data.prog + _config.prog_rate[number] --普通元素消除，进度增加
                 if #series > 3 then
-                    local left, down = left_down(series)
-                    _status_data.grid[left][down] = _config.spec_make[count] --处理4个及以上的元素
+                    local x, y = left_down(series)
+                    _status_data.grid[x][y] = _config.spec_make[count] --处理4个及以上的元素
                     _status_data.all_rate = _status_data.all_rate + _config.spec_rate[_config.spec_make[count]] --特殊元素消除，赔率增加
                     _status_data.prog = _status_data.prog + _config.prog_spec_rate[#series] --特殊元素消除，进度增加
                 end
@@ -251,6 +284,10 @@ function LF.create_one_data(_config, _status_data)
     while xiaochu_grid(_config, _status_data) do
         drop_grid(_config, _status_data)
 
+        while xiaochu_grid(_config, _status_data) do
+            drop_grid(_config, _status_data)
+        end
+
         if _status_data.cur_has_spec then
             blast_spec(_config, _status_data)
 
@@ -260,9 +297,9 @@ function LF.create_one_data(_config, _status_data)
 
     -- 结束，组装数据
     return {
-        all_rate = _status_data.creator.all_rate,
-        xc_data = xc_data_to_string(_status_data.creator.xc_data_vec),
-        prog = _status_data.creator.prog
+        all_rate = _status_data.all_rate,
+        xc_data = xc_data_to_string(_status_data.xc_data_vec),
+        prog = _status_data.prog
     }
 end
 
