@@ -11,5 +11,6 @@
         "emmy-lua": "Hint",
         "undefined-global": "Hint",
         "lowercase-global": "Hint",
-    }
+    },
+    "python.formatting.provider": "yapf"
 }
